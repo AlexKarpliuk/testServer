@@ -41,58 +41,59 @@ const connectDB = async () => {
 };
 
 // Generate a salt to add to the hash
-const salt = bcrypt.genSaltSync(10);
-const secretKey = '1234567890'
+// const salt = bcrypt.genSaltSync(10);
+// const secretKey = '1234567890'
 
-app.post('/admin', async (req, res) => {
-	const { login, password } = req.body
-	const adminInfo = await Admin.findOne({ login });
-	if (!adminInfo) {
-		return res.status(400).json({ txt: 'admin not found' })
-	}
-	const passOk = bcrypt.compareSync(password, adminInfo.password);
-	if (!passOk) {
-		res.status(400).json({ txt: 'wrong password' })
-	} else {
-		jwt.sign({ login, id: adminInfo._id }, secretKey, {}, (err, token) => {
-			if (err) throw err;
-			console.log('Generated token:', token);
-			res.cookie('token', token, {
-				httpOnly: true,
-				secure: true,
-				sameSite: 'none'
-			}).json({
-				id: adminInfo._id,
-				login,
-				txt: 'success',
-				token,
-			});
-		})
-	}
-});
+// app.post('/admin', async (req, res) => {
+// 	const { login, password } = req.body
+// 	const adminInfo = await Admin.findOne({ login });
+// 	if (!adminInfo) {
+// 		return res.status(400).json({ txt: 'admin not found' })
+// 	}
+// 	const passOk = bcrypt.compareSync(password, adminInfo.password);
+// 	if (!passOk) {
+// 		res.status(400).json({ txt: 'wrong password' })
+// 	} else {
+// 		jwt.sign({ login, id: adminInfo._id }, secretKey, {}, (err, token) => {
+// 			if (err) throw err;
+// 			console.log('Generated token:', token);
+// 			res.cookie('token', token, {
+// 				httpOnly: true,
+// 				secure: true,
+// 				sameSite: 'none'
+// 			}).json({
+// 				id: adminInfo._id,
+// 				login,
+// 				txt: 'success',
+// 				token,
+// 			});
+// 		})
+// 	}
+
+// });
 // Profile info
-app.get('/profile', (req, res) => {
-	const { token } = req.cookies;
-	if (!token) {
-		// If token is empty
-		res.status(400).json({ message: 'Token is missing' });
-	} else {
-		jwt.verify(token, secretKey, {}, (err, info) => {
-			if (err) throw err;
-			res.json(info);
-		});
-	}
-});
+// app.get('/profile', (req, res) => {
+// 	const { token } = req.cookies;
+// 	if (!token) {
+// 		// If token is empty
+// 		res.status(400).json({ message: 'Token is missing' });
+// 	} else {
+// 		jwt.verify(token, secretKey, {}, (err, info) => {
+// 			if (err) throw err;
+// 			res.json(info);
+// 		});
+// 	}
+// });
 
 
 // Logout, clean up the token info
-app.post('/logout', (req, res) => {
-	res.cookie('token', '', {
-		httpOnly: true,
-		secure: true,
-		sameSite: 'none'
-	}).json('ok');
-});
+// app.post('/logout', (req, res) => {
+// 	res.cookie('token', '', {
+// 		httpOnly: true,
+// 		secure: true,
+// 		sameSite: 'none'
+// 	}).json('ok');
+// });
 
 app.post('/list', async (req, res) => {
 	try {
